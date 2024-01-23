@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-container
+    environment:
+      PG_USER: barca
+      PG_PASSWORD: barca123
+      PG_DB: barcaapp2,
+      PG_HOST: localhost
+      PG_PORT: 5432
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
