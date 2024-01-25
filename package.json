@@ -9,7 +9,7 @@
     "start": "node dist/server.js",
     "migration:dev": "npx prisma migrate dev",
     "migration:deploy": "npx prisma migrate deploy",
-    "build:production": "npm i && npm run build && npx prisma migrate deploy"
+    "build:production": "npm i && npm run build"
   },
   "engines": {
     "node": "18"
