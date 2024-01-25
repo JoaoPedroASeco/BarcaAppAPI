@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx src/server.ts",
+    "dev": "tsnd --respawn --transpile-only --exit-child src/app.ts",
     "build": "tsup src",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "migration:dev": "npx prisma migrate dev",
+    "migration:deploy": "npx prisma migrate deploy",
+    "build:production": "npm i && npm run build && npx prisma migrate deploy"
   },
   "engines": {
     "node": "18"
@@ -15,15 +18,22 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^20.11.5",
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "^20.11.6",
     "prisma": "^5.8.1",
+    "ts-node-dev": "^2.0.0",
     "tsup": "^8.0.1",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@prisma/client": "^5.8.1",
+    "dotenv": "^16.4.0",
     "fastify": "^4.25.2",
-    "zod": "^3.22.4"
+    "fastify-jwt": "^4.2.0",
+    "fastify-swagger": "^5.2.0",
+    "fastify-zod": "^1.4.0",
+    "zod": "^3.22.4",
+    "zod-to-json-schema": "^3.22.3"
   }
 }

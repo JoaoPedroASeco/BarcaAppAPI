@@ -11,8 +11,68 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String
+  // CUID
+  id String @id @default(cuid())
+
+  // Required - User Info
+  name        String
+  email       String @unique
+  password    String
+  phoneNumber String
+  cpf         String
+
+  // Nullable - Store Info
+  storeName         String?
+  storeCNPJ         String?
+  storeSocialReazon String?
+  storePhoneNumber  String?
+  storeIsActive     Boolean?
+  storeRate         Float?
+  storeDescription  String?
+  storeCategoryId   String?
+  storeStatusId     String?
+
+  // Nullable - User Info
+  avatar            String?
+  postCode          String?
+  country           String?
+  city              String?
+  neighborhood      String?
+  address           String?
+  addressNumber     Int?
+  addressComplement String?
+  salt              String?
+
+  // Relationship
+  roleId      UserRoles? @relation(fields: [userRolesId], references: [id])
+  userRolesId String?
+
+  // Timestamps
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model StoreCategory {
+  // CUID
+  id String @id @default(cuid())
+
+  // Required
+  name String
+}
+
+model StoreStatus {
+  // CUID
+  id String @id @default(cuid())
+
+  // Required
+  name String
+}
+
+model UserRoles {
+  // CUID
+  id String @id @default(cuid())
+
+  // Required
+  name String
+  User User[]
 }
