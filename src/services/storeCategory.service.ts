@@ -20,6 +20,15 @@ export async function createStoreCategoryMock(
   }
 }
 
+export async function getAllStoreCategories(reply: FastifyReply) {
+  try {
+    return await prisma.storeCategory.findMany();
+  } catch (error) {
+    console.error(error);
+    return reply.code(500).send(error);
+  }
+}
+
 export async function createStoreCategory(
   input: CreateStoreCategoryRequestProps,
   reply: FastifyReply

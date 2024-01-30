@@ -2,6 +2,7 @@
 import {
   createStoreCategory,
   createStoreCategoryMock,
+  getAllStoreCategories,
 } from "../services/storeCategory.service";
 
 // Schemas
@@ -11,6 +12,7 @@ import { CreateStoreCategoryRequestProps } from "../schemas/storeCategory.schema
 import { FastifyReply } from "fastify/types/reply";
 import { FastifyRequest } from "fastify/types/request";
 
+// Mock
 export async function createStoreCategoryMockHandler(
   request: FastifyRequest<{ Body: CreateStoreCategoryRequestProps }>,
   reply: FastifyReply
@@ -38,6 +40,22 @@ export async function createStoreCategoryMockHandler(
   }
 }
 
+// Get
+export async function getStoreCategoryHandler(
+  request: FastifyRequest<{ Body: CreateStoreCategoryRequestProps }>,
+  reply: FastifyReply
+) {
+  try {
+    const storeCategories = await getAllStoreCategories(reply);
+
+    return reply.code(200).send(storeCategories);
+  } catch (error) {
+    console.error(error);
+    return reply.code(500).send(error);
+  }
+}
+
+// Create
 export async function createStoreCategoryHandler(
   request: FastifyRequest<{ Body: CreateStoreCategoryRequestProps }>,
   reply: FastifyReply

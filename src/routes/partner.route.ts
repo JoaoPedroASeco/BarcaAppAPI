@@ -2,7 +2,12 @@
 import { FastifyInstance } from "fastify";
 
 // Controllers
-import { createPartnerHandler } from "../controller/partner.controller";
+import {
+  createPartnerHandler,
+  deletePartnerHandler,
+  getAllPartnerHandler,
+  updatePartnerHandler,
+} from "../controller/partner.controller";
 
 // Schemas
 import { $ref } from "../schemas/partner.schema";
@@ -20,5 +25,41 @@ export async function partnerRoutes(server: FastifyInstance) {
       },
     },
     createPartnerHandler
+  );
+
+  server.get(
+    "/",
+    // {
+    //   schema: {
+    //     response: {
+    //       201: $ref("createPartnerResponseSchema"),
+    //     },
+    //   },
+    // },
+    getAllPartnerHandler
+  );
+
+  server.patch(
+    "/",
+    // {
+    //   schema: {
+    //     response: {
+    //       201: $ref("createPartnerResponseSchema"),
+    //     },
+    //   },
+    // },
+    updatePartnerHandler
+  );
+
+  server.delete(
+    "/:id",
+    // {
+    //   schema: {
+    //     response: {
+    //       201: $ref("createPartnerResponseSchema"),
+    //     },
+    //   },
+    // },
+    deletePartnerHandler
   );
 }

@@ -29,7 +29,6 @@ model User {
   storeIsActive     Boolean?
   storeRate         Float?
   storeDescription  String?
-  storeCategoryId   String?
   storeStatusId     String?
 
   // Nullable - User Info
@@ -48,8 +47,9 @@ model User {
   userRolesId String?
 
   // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @default(now())
+  UserStoreCategories UserStoreCategories[]
 }
 
 model StoreCategory {
@@ -57,7 +57,8 @@ model StoreCategory {
   id String @id @default(cuid())
 
   // Required
-  name String
+  name                String
+  UserStoreCategories UserStoreCategories[]
 }
 
 model StoreStatus {
@@ -75,4 +76,14 @@ model UserRoles {
   // Required
   name String
   User User[]
+}
+
+model UserStoreCategories {
+  // CUID
+  id String @id @default(cuid())
+
+  userId           User          @relation(fields: [user_Id], references: [id])
+  storeCategoryId  StoreCategory @relation(fields: [storeCategory_Id], references: [id])
+  user_Id          String
+  storeCategory_Id String
 }

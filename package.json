@@ -27,6 +27,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@fastify/cors": "^8.5.0",
     "@prisma/client": "^5.8.1",
     "dotenv": "^16.4.0",
     "fastify": "^4.25.2",

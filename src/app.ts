@@ -4,6 +4,7 @@ import fastify from "fastify";
 // Libs
 import fjwt from "fastify-jwt-deprecated";
 import "dotenv/config";
+import cors from "@fastify/cors";
 
 // Constants
 import { API_HOST, API_PORT, API_SECRET } from "./utils/constants";
@@ -49,6 +50,12 @@ server.decorate("authenticate", async (request: any, reply: any) => {
   }
 });
 
+// Allow Cors
+server.register(cors, {
+  origin: "*",
+  methods: ["POST", "GET", "UPDATE", "PUT", "PATCH", "DELETE"],
+});
+
 // Main
 async function main() {
   // Schemas
@@ -72,7 +79,7 @@ async function main() {
 
 // Healt Checking
 server.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
-  return reply.status(200).send({ message: "healt checked" });
+  return reply.status(200).send({ message: "OK" });
 });
 
 main();

@@ -5,6 +5,7 @@ import { FastifyInstance } from "fastify";
 import {
   createStoreCategoryHandler,
   createStoreCategoryMockHandler,
+  getStoreCategoryHandler,
 } from "../controller/storeCategory.controller";
 
 // Schemas
@@ -23,6 +24,19 @@ export async function storeCategoryRoutes(server: FastifyInstance) {
     //   },
     // },
     createStoreCategoryMockHandler
+  );
+
+  server.get(
+    "/",
+    // {
+    //   schema: {
+    //     body: $ref("createStoreCategoryRequestSchema"),
+    //     response: {
+    //       201: $ref("createStoreCategoryResponseSchema"),
+    //     },
+    //   },
+    // },
+    getStoreCategoryHandler
   );
 
   server.post(

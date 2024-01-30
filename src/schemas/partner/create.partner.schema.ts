@@ -1,7 +1,7 @@
-import { boolean, number, object, string } from "zod";
+import { array, boolean, number, object, string, z } from "zod";
 import { baseSchema } from "../index";
 
-export const createPartnerRequest = {
+export const createPartner = {
   // Required - User Info
   name: string({
     required_error: "O campo 'Nome' e obrigtorio.",
@@ -24,13 +24,21 @@ export const createPartnerRequest = {
     invalid_type_error: "CPF precisa ser um texto.",
   }),
 
-  // Nullable - Store Info
+  // Store Info
   storeName: string({
     invalid_type_error: "Nome da loja precisa ser um texto.",
-  }).nullable(),
+  }),
   storeCNPJ: string({
     invalid_type_error: "CNPJ da loja precisa ser um texto.",
   }),
+  storeCategoryIds: array(
+    z.string({
+      invalid_type_error: "Id da categoria da loja precisa ser um texto.",
+    })
+  )
+    .nullable()
+    .optional(),
+
   storeSocialReazon: string({
     invalid_type_error: "Razao Social da loja precisa ser um texto.",
   }).nullable(),
@@ -38,8 +46,8 @@ export const createPartnerRequest = {
     invalid_type_error: "Telefone da loja precisa ser um texto.",
   }).nullable(),
 
-  storeCategoryId: string({
-    invalid_type_error: "Categoria da loja precisa ser um texto.",
+  storeDescription: string({
+    invalid_type_error: "Descricao da loja precisa ser um texto.",
   }).nullable(),
 
   storeStatusId: string({
@@ -56,9 +64,6 @@ export const createPartnerRequest = {
   })
     .nullable()
     .default(5),
-  storeDescription: string({
-    invalid_type_error: "Descricao da loja precisa ser um texto.",
-  }).nullable(),
 
   // Nullable - User Info
   avatar: string({
@@ -92,11 +97,73 @@ export const createPartnerRequest = {
   }).nullable(),
 };
 
+export const updatePartner = {
+  id: string(),
+
+  name: string({
+    required_error: "O campo 'Nome' e obrigtorio.",
+    invalid_type_error: "Nome precisa ser um texto.",
+  }),
+  email: string({
+    required_error: "O campo 'E-Mail' e obrigtorio.",
+    invalid_type_error: "E-Mail precisa ser um texto.",
+  }).email(),
+  password: string({
+    required_error: "O campo 'Senha' e obrigatorio'.",
+    invalid_type_error: "Senha precisa ser um texto.",
+  }),
+  phoneNumber: string({
+    required_error: "O campo 'Telefone' e obrigatorio'.",
+    invalid_type_error: "Telefone precisa ser um texto.",
+  }),
+  cpf: string({
+    required_error: "O campo 'CPF' e obrigatorio'.",
+    invalid_type_error: "CPF precisa ser um texto.",
+  }),
+
+  storeName: string({
+    invalid_type_error: "Nome da loja precisa ser um texto.",
+  }),
+  storeCNPJ: string({
+    invalid_type_error: "CNPJ da loja precisa ser um texto.",
+  }),
+  storeCategoryIds: array(
+    z.string({
+      invalid_type_error: "Id da categoria da loja precisa ser um texto.",
+    })
+  ),
+
+  storeSocialReazon: string().nullable(),
+  storePhoneNumber: string().nullable(),
+  storeDescription: string().nullable(),
+  storeStatusId: string().nullable(),
+  storeIsActive: boolean().nullable(),
+  storeRate: number().nullable(),
+  avatar: string().nullable(),
+  postCode: string().nullable(),
+  country: string().nullable(),
+  city: string().nullable(),
+  neighborhood: string().nullable(),
+  address: string().nullable(),
+  addressNumber: number().nullable(),
+  addressComplement: string().nullable(),
+  userRolesId: string(),
+};
+
 export const createPartnerRequestSchema = object({
-  ...createPartnerRequest,
+  ...createPartner,
 });
 
 export const createPartnerResponseSchema = object({
   ...baseSchema,
-  ...createPartnerRequest,
+  ...createPartner,
+});
+
+export const updatePartnerRequestSchema = object({
+  ...updatePartner,
+});
+
+export const updatePartnerResponseSchema = object({
+  ...baseSchema,
+  ...updatePartner,
 });
