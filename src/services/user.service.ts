@@ -41,11 +41,11 @@ export async function createPartner(
       ...rest
     } = input;
 
+    // Fazer verificacao dos campos unicos  retornar erro caso receba dados repetidos
+
     if (!storeCategoryIds?.length) {
       throw new Error("Categoria invalida. Seleciona ao menos uma categoria.");
     }
-
-    let defaultRoleId: string;
 
     const { hash, salt } = hashPassword(password);
 
@@ -85,12 +85,17 @@ export async function createPartner(
 
     // Create Relations whit Partner and storeCategories
     storeCategoryIds.map(async (id) => {
-      await prisma.userStoreCategories.create({
-        data: {
-          storeCategory_Id: id,
-          user_Id: partner.id,
-        },
-      });
+      try {
+        await prisma.userStoreCategories.create({
+          data: {
+            storeCategory_Id: id,
+            user_Id: partner.id,
+          },
+        });
+      } catch (error: any) {
+        console.log(error.message);
+        throw new Error("Erro ao criar as categorias da loja " + error.message);
+      }
     });
 
     return partner;
@@ -102,17 +107,11 @@ export async function createPartner(
 
 export async function getAllPartners(reply: FastifyReply) {
   try {
-    const partners = await prisma.user.findMany();
-
-    if (partners.length > 0) {
-      return await prisma.user.findMany({
-        include: {
-          UserStoreCategories: true,
-        },
-      });
-    } else {
-      return [];
-    }
+    return await prisma.user.findMany({
+      include: {
+        UserStoreCategories: true,
+      },
+    });
   } catch (error: any) {
     console.error(error.message);
     return reply.code(500).send(error.message);
