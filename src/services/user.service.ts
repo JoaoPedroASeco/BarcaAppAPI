@@ -107,11 +107,42 @@ export async function createPartner(
 
 export async function getAllPartners(reply: FastifyReply) {
   try {
-    return await prisma.user.findMany({
-      include: {
-        UserStoreCategories: true,
-      },
-    });
+    return await prisma.$queryRaw`
+      SELECT
+        "public"."User"."id",
+        "public"."User"."name",
+        "public"."User"."email",
+        "public"."User"."phoneNumber",
+        "public"."User"."cpf",
+        "public"."User"."storeName",
+        "public"."User"."storeCNPJ",
+        "public"."User"."storeSocialReazon",
+        "public"."User"."storePhoneNumber",
+        "public"."User"."storeDescription",
+        "public"."User"."avatar",
+        "public"."User"."postCode",
+        "public"."User"."country",
+        "public"."User"."city",
+        "public"."User"."neighborhood",
+        "public"."User"."address",
+        "public"."User"."addressNumber",
+        "public"."User"."addressComplement",
+        "public"."User"."storeCategoryId",
+        "public"."User"."userRolesId",
+        "public"."User"."createdAt",
+        "public"."User"."updatedAt",
+        json_agg(jsonb_build_object('storeCategoryId', "public"."StoreCategory"."id")) AS "UserStoreCategories"
+      FROM
+        "public"."User"
+      LEFT JOIN
+        "public"."UserStoreCategories"
+        ON "public"."User"."id" =  "public"."UserStoreCategories"."user_Id"
+      LEFT JOIN
+        "public"."StoreCategory"
+        ON  "public"."UserStoreCategories"."storeCategory_Id" = "public"."StoreCategory"."id"
+      GROUP BY
+        "public"."User"."id";
+    `;
   } catch (error: any) {
     console.error(error.message);
     return reply.code(500).send(error.message);

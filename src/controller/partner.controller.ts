@@ -38,12 +38,7 @@ export async function getAllPartnerHandler(
   reply: FastifyReply
 ) {
   try {
-    // const partner = await getAllPartners(reply);
-    const partners = await prisma.user.findMany({
-      include: {
-        UserStoreCategories: true,
-      },
-    });
+    const partners = await getAllPartners(reply);
 
     return reply.code(200).send(partners);
   } catch (error: any) {
