@@ -39,7 +39,11 @@ export async function getAllPartnerHandler(
 ) {
   try {
     // const partner = await getAllPartners(reply);
-    const partners = await prisma.user.findMany();
+    const partners = await prisma.user.findMany({
+      include: {
+        UserStoreCategories: true,
+      },
+    });
 
     return reply.code(200).send(partners);
   } catch (error: any) {
