@@ -15,6 +15,7 @@ import {
 // Types
 import { FastifyReply } from "fastify/types/reply";
 import { FastifyRequest } from "fastify/types/request";
+import { prisma } from "../utils/prisma";
 
 export async function createPartnerHandler(
   request: FastifyRequest<{ Body: CreatePartnerRequestProps }>,
@@ -37,9 +38,10 @@ export async function getAllPartnerHandler(
   reply: FastifyReply
 ) {
   try {
-    const partner = await getAllPartners(reply);
+    // const partner = await getAllPartners(reply);
+    const partners = await prisma.user.findMany();
 
-    return reply.code(200).send(partner);
+    return reply.code(200).send(partners);
   } catch (error: any) {
     console.error(error.message);
     return reply.code(500).send(error.message);

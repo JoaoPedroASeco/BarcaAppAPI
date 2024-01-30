@@ -107,8 +107,6 @@ export async function createPartner(
 
 export async function getAllPartners(reply: FastifyReply) {
   try {
-    return await prisma.userStoreCategories.findMany();
-
     return await prisma.user.findMany({
       include: {
         UserStoreCategories: true,
