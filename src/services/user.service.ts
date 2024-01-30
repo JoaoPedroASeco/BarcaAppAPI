@@ -69,7 +69,11 @@ export async function createPartner(
 
 export async function getAllPartners(reply: FastifyReply) {
   try {
-    const partners = await prisma.user.findMany();
+    const partners = await prisma.user.findMany({
+      include: {
+        UserStoreCategories: false,
+      },
+    });
 
     if (partners.length > 0) {
       return await prisma.user.findMany({
@@ -122,7 +126,7 @@ export async function updatePartners(
       ...rest,
       updatedAt: partnerAlreadyExists.updatedAt,
       createdAt: partnerAlreadyExists.createdAt,
-      storeCategoryId: partnerAlreadyExists.storeCategoryId,
+      // storeCategoryIds: partnerAlreadyExists.storeCategoryIds,
       storeSocialReazon:
         storeSocialReazon !== null
           ? storeSocialReazon
