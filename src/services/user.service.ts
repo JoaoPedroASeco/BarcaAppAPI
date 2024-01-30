@@ -20,7 +20,6 @@ export async function createPartner(
     const {
       password,
       userRolesId,
-      storeCategoryIds,
       cpf,
       email,
       name,
@@ -38,6 +37,7 @@ export async function createPartner(
       storeName,
       storePhoneNumber,
       storeSocialReazon,
+      storeCategoryIds,
       ...rest
     } = input;
 
@@ -59,7 +59,6 @@ export async function createPartner(
 
     const partner = await prisma.user.create({
       data: {
-        ...rest,
         cpf,
         email,
         name,
@@ -79,12 +78,13 @@ export async function createPartner(
         storeSocialReazon,
         password: hash,
         salt,
-        userRolesId: partnerRoleId.id,
+        // userRolesId: partnerRoleId.id,
+        ...rest,
       },
     });
 
     // Create Relations whit Partner and storeCategories
-    storeCategoryIds.map(async (id) => {
+    await storeCategoryIds.map(async (id) => {
       try {
         await prisma.userStoreCategories.create({
           data: {
@@ -100,7 +100,11 @@ export async function createPartner(
       }
     });
 
-    return partner;
+    const UserStoreCategories = storeCategoryIds.map((item) => {
+      return { storeCategoryId: item };
+    });
+
+    return { ...partner, UserStoreCategories };
   } catch (error: any) {
     console.error(error.message);
     return reply.code(500).send(error.message);

@@ -16,14 +16,14 @@ import { $ref } from "../schemas/partner.schema";
 export async function partnerRoutes(server: FastifyInstance) {
   server.post(
     "/",
-    {
-      schema: {
-        body: $ref("createPartnerRequestSchema"),
-        response: {
-          201: $ref("createPartnerResponseSchema"),
-        },
-      },
-    },
+    // {
+    //   schema: {
+    //     body: $ref("createPartnerRequestSchema"),
+    //     response: {
+    //       201: $ref("createPartnerResponseSchema"),
+    //     },
+    //   },
+    // },
     createPartnerHandler
   );
 

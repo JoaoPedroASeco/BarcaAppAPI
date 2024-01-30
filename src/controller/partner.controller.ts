@@ -15,7 +15,6 @@ import {
 // Types
 import { FastifyReply } from "fastify/types/reply";
 import { FastifyRequest } from "fastify/types/request";
-import { prisma } from "../utils/prisma";
 
 export async function createPartnerHandler(
   request: FastifyRequest<{ Body: CreatePartnerRequestProps }>,
