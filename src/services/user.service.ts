@@ -254,11 +254,10 @@ export async function deletePartners(id: string, reply: FastifyReply) {
       throw new Error("Parceiro nao encontrado!");
     }
 
-    await prisma.userStoreCategories.deleteMany({
-      where: {
-        user_Id: partnerAlreadyExists.id,
-      },
-    });
+    await prisma.$queryRaw`
+      DELETE FROM "public"."UserStoreCategories"
+      WHERE "public"."UserStoreCategories"."user_Id" = ${partnerAlreadyExists.id}
+    `;
 
     await prisma.user.delete({
       where: { id: id },
