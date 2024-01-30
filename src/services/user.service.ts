@@ -94,7 +94,9 @@ export async function createPartner(
         });
       } catch (error: any) {
         console.log(error.message);
-        throw new Error("Erro ao criar as categorias da loja " + error.message);
+        throw new Error(
+          `Erro ao criar as categorias da loja; Error: ${error.message}`
+        );
       }
     });
 
