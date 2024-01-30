@@ -102,11 +102,7 @@ export async function createPartner(
 
 export async function getAllPartners(reply: FastifyReply) {
   try {
-    const partners = await prisma.user.findMany({
-      include: {
-        UserStoreCategories: false,
-      },
-    });
+    const partners = await prisma.user.findMany();
 
     if (partners.length > 0) {
       return await prisma.user.findMany({
