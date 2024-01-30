@@ -17,7 +17,29 @@ export async function createPartner(
   reply: FastifyReply
 ) {
   try {
-    const { password, userRolesId, storeCategoryIds, ...rest } = input;
+    const {
+      password,
+      userRolesId,
+      storeCategoryIds,
+      cpf,
+      email,
+      name,
+      phoneNumber,
+      address,
+      addressComplement,
+      addressNumber,
+      avatar,
+      city,
+      country,
+      neighborhood,
+      postCode,
+      storeCNPJ,
+      storeDescription,
+      storeName,
+      storePhoneNumber,
+      storeSocialReazon,
+      ...rest
+    } = input;
 
     if (!storeCategoryIds?.length) {
       throw new Error("Categoria invalida. Seleciona ao menos uma categoria.");
@@ -27,26 +49,37 @@ export async function createPartner(
 
     const { hash, salt } = hashPassword(password);
 
-    if (!userRolesId) {
-      defaultRoleId = "clrsh76s40001fd595spuxeba";
-    } else {
-      const customerRole = await prisma.userRoles.findUnique({
-        where: { id: userRolesId },
-      });
+    const partnerRoleId = await prisma.userRoles.findFirst({
+      where: { name: "Partner" },
+    });
 
-      if (customerRole?.id.length) {
-        defaultRoleId = customerRole?.id ? customerRole.id : "";
-      } else {
-        defaultRoleId = "clrsh76s40001fd595spuxeba";
-      }
+    if (!partnerRoleId) {
+      throw new Error("Categoria nao encontrada");
     }
 
     const partner = await prisma.user.create({
       data: {
+        ...rest,
+        cpf,
+        email,
+        name,
+        phoneNumber,
+        address,
+        addressComplement,
+        addressNumber,
+        avatar,
+        city,
+        country,
+        neighborhood,
+        postCode,
+        storeCNPJ,
+        storeDescription,
+        storeName,
+        storePhoneNumber,
+        storeSocialReazon,
         password: hash,
         salt,
-        userRolesId: defaultRoleId,
-        ...rest,
+        userRolesId: partnerRoleId.id,
       },
     });
 
