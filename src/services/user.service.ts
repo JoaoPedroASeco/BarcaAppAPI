@@ -69,11 +69,17 @@ export async function createPartner(
 
 export async function getAllPartners(reply: FastifyReply) {
   try {
-    return await prisma.user.findMany({
-      include: {
-        UserStoreCategories: true,
-      },
-    });
+    const partners = await prisma.user.findMany();
+
+    if (partners.length > 0) {
+      return await prisma.user.findMany({
+        include: {
+          UserStoreCategories: true,
+        },
+      });
+    } else {
+      return [];
+    }
   } catch (error: any) {
     console.error(error.message);
     return reply.code(500).send(error.message);
