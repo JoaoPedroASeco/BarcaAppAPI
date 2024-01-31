@@ -24,7 +24,7 @@ export async function createCategoryMockHandler(
     { name: "lava jato" },
     { name: "lava rapido" },
     { name: "posto de combustivel" },
-    { name: "troca de oleo" },
+    { name: "troca de oleo" }, //test
   ];
 
   try {
