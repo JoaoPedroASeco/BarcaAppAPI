@@ -6,7 +6,7 @@ import { buildJsonSchemas } from "fastify-zod";
 import {
   authLoginRequestSchema,
   authLoginResponseSchema,
-} from "./auth/auth.login.schema";
+} from "./schemaTypes/auth/auth.login.schema";
 
 export type AuthLoginRequestProps = z.infer<typeof authLoginRequestSchema>;
 

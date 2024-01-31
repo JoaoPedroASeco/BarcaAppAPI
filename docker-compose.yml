@@ -6,13 +6,15 @@ version: "3.8"
 services:
   postgres:
     image: postgres:latest
-    container_name: postgres-container
+    container_name: pg-container
     environment:
+      PGDATA: /var/lib/postgresql/data/barcaapp/
       POSTGRES_USER: barca
       POSTGRES_PASSWORD: barca
-      POSTGRES_DB: barca,
+      POSTGRES_DB: barca
       POSTGRES_HOST: 0.0.0.0
     ports:
       - "5432:5432"
     volumes:
+      - ./postgresql.conf:/etc/postgresql.conf
       - ./postgres-data:/var/lib/postgresql/data

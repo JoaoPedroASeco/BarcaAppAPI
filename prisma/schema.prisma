@@ -10,29 +10,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Default Initial Model 
+// model ModelName {
+//   // CUID
+//   id String @id @default(cuid())
+
+// // Timestamps
+// createdAt DateTime @default(now())
+// updatedAt DateTime @default(now())
+// }
+
+// User
 model User {
   // CUID
   id String @id @default(cuid())
 
-  // Required - User Info
+  // Core - Required
   name        String
   email       String @unique
   password    String
-  phoneNumber String
-  cpf         String
+  phoneNumber String @unique
+  cpf         String @unique
+  role        Roles  @default(USER)
 
-  // Nullable - Store Info
-  storeName         String?
-  storeCNPJ         String?
-  storeSocialReazon String?
-  storePhoneNumber  String?
-  storeIsActive     Boolean?
-  storeRate         Float?
-  storeDescription  String?
-  storeStatusId     String?
+  // Core - Nullable
+  avatar String?
+  salt   String?
 
-  // Nullable - User Info
-  avatar            String?
+  // Address - Nullable
   postCode          String?
   country           String?
   city              String?
@@ -40,51 +45,231 @@ model User {
   address           String?
   addressNumber     Int?
   addressComplement String?
-  storeCategoryId   String?
-  salt              String?
 
-  // Relationship
-  roleId      UserRoles? @relation(fields: [userRolesId], references: [id])
-  userRolesId String?
+  // Relationship - Required
+  Ordes      Ordes[]
+  UserCupons UserCupons[]
 
   // Timestamps
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @default(now())
-  UserStoreCategories UserStoreCategories[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  Wallet    Wallet[]
 }
 
-model StoreCategory {
+model Store {
   // CUID
   id String @id @default(cuid())
 
-  // Required
-  name                String
-  UserStoreCategories UserStoreCategories[]
+  // Core - Required
+  name         String @unique
+  email        String @unique
+  password     String
+  socialReazon String
+  phoneNumber  String @unique
+  cnpj         String @unique
+
+  // Core - Nullable
+  role        Roles?  @default(PARTNER)
+  description String?
+  rate        Float?  @default(5)
+  status      Status  @default(PENDING)
+  isActive    Boolean @default(false)
+  avatar      String?
+  salt        String?
+
+  // Address - Nullable
+  postCode          String?
+  country           String?
+  city              String?
+  neighborhood      String?
+  address           String?
+  addressNumber     Int?
+  addressComplement String?
+
+  // Relationship - Required
+  Wallet Wallet[]
+  StoreCategories StoreCategories[]
+
+  // Timestamps
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now())
 }
 
-model StoreStatus {
+model Categories {
   // CUID
   id String @id @default(cuid())
 
-  // Required
-  name String
+  // Core - Required
+  name String @unique
+
+  // Core - Nullable
+  isActive Boolean? @default(true)
+
+  // Relationship - Required
+  StoreCategories   StoreCategories[]
+  ProductCategories ProductCategories[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
-model UserRoles {
+model StoreCategories {
   // CUID
   id String @id @default(cuid())
 
-  // Required
-  name String
-  User User[]
+  // Core - Required
+  storeId      String
+  categoryId String
+
+  // Relationship - Required
+  category Categories @relation(fields: [categoryId], references: [id])
+  store    Store      @relation(fields: [storeId], references: [id])
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
-model UserStoreCategories {
+model ProductCategories {
   // CUID
   id String @id @default(cuid())
 
-  userId           User          @relation(fields: [user_Id], references: [id])
-  storeCategoryId  StoreCategory @relation(fields: [storeCategory_Id], references: [id])
-  user_Id          String
-  storeCategory_Id String
+  // Core - Required
+  productId    Products @relation(fields: [productsId], references: [id])
+  categoriesId String
+
+  // Relationship - Required
+  category Categories @relation(fields: [categoriesId], references: [id])
+
+  // Timestamps
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+  productsId String
+}
+
+model Products {
+  // CUID
+  id String @id @default(cuid())
+
+  // Core - Required
+  name  String @unique
+  price Float  @default(0)
+
+  // Core - Nullable
+  avatar      String?
+  description String?
+  discount    Float?  @default(0)
+
+  // Relationship - Required
+  ProductCategories ProductCategories[]
+  Ordes             Ordes[]
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Ordes {
+  // CUID
+  id String @id @default(cuid())
+
+  // Core - Required
+  userId    String
+  productId String
+  status    Status @default(PENDING)
+  quantity  Int    @default(1)
+
+  // Relationship - Required
+  product Products @relation(fields: [productId], references: [id])
+  user    User     @relation(fields: [userId], references: [id])
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Cupons {
+  // CUID
+  id String @id @default(cuid())
+
+  // Core - Required
+  name    String @unique
+  dicount Float  @default(0)
+  price   Float  @default(0)
+
+  // Core - Nullable
+  description String?
+
+  // Timestamps
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
+  UserCupons UserCupons[]
+}
+
+model UserCupons {
+  // CUID
+  id String @id @default(cuid())
+
+  // Core - Required
+  userId   String
+  cuponsId String
+
+  // Relationship - Required
+  user  User   @relation(fields: [userId], references: [id])
+  cupom Cupons @relation(fields: [cuponsId], references: [id])
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Wallet {
+  // CUID
+  id String @id @default(cuid())
+
+  // Core - Required
+  available         Float  @default(0)
+  bankId            String // Replace to real Bank Ids
+  agencyNumber      String
+  bankAccountNumber String
+  accountBankType   String
+
+  // Relationship - Required
+  userId  String
+  storeId String
+
+  // Relationship 
+  user  User  @relation(fields: [userId], references: [id])
+  store Store @relation(fields: [storeId], references: [id])
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model ValidationCodes {
+  // CUID
+  id String @id @default(cuid())
+
+  // Core - Required
+  type       String // Email, SMS
+  code       String
+  isVerifyed Boolean @default(false)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+enum Roles {
+  USER
+  ADMIN
+  PARTNER
+}
+
+enum Status {
+  PENDING
+  APPROVED
+  REPROVED
 }

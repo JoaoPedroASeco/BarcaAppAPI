@@ -1,25 +1,15 @@
 // Imported Routes
-import { partnerRoutes } from "./partner.route";
-import { storeCategoryRoutes } from "./storeCategory.route";
-import { storeStatusRoutes } from "./storeStatus.route";
-import { userRoleRoutes } from "./userRole.route";
+import { storeRoutes } from "./store.route";
+import { categoryRoutes } from "./category.route";
 
 // Exported Routes
 export const routes = [
   {
-    route: partnerRoutes,
-    prefix: "/partners",
+    route: storeRoutes,
+    prefix: "/stores",
   },
   {
-    route: storeCategoryRoutes,
-    prefix: "/store-categories",
-  },
-  {
-    route: storeStatusRoutes,
-    prefix: "/store-statuses",
-  },
-  {
-    route: userRoleRoutes,
-    prefix: "/user-roles",
+    route: categoryRoutes,
+    prefix: "/categories",
   },
 ];

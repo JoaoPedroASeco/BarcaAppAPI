@@ -2,7 +2,7 @@
 import { string } from "zod";
 
 // Schemas
-import { partnerSchema } from "./partner.schema";
+import { storeSchema } from "./store.schema";
 
 // Base Schema
 export const baseSchema = {
@@ -11,4 +11,4 @@ export const baseSchema = {
   updatedAt: string(),
 };
 
-export const schemas = [...partnerSchema];
+export const schemas = [...storeSchema];
