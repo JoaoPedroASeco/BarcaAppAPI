@@ -25,7 +25,7 @@ export type UpdateStoreProps = {
   city: string | undefined;
   neighborhood: string | undefined;
   address: string | undefined;
-  addressNumber: number | undefined;
+  addressNumber: string | undefined;
   addressComplement: string | undefined;
 
   updatedAt: string | undefined;

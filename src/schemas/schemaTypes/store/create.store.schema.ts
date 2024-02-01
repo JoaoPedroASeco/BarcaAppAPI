@@ -54,7 +54,7 @@ export const createStore = {
   address: string({
     invalid_type_error: "Endereco precisa ser um texto.",
   }).nullable(),
-  addressNumber: number({
+  addressNumber: string({
     invalid_type_error: "Numero do endereco precisa ser um texto.",
   }).nullable(),
   addressComplement: string({
