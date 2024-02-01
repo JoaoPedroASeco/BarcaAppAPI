@@ -7,7 +7,7 @@ import {
   getStoreAndCategoriesHandler,
   getStoreAndCategoriesWithStoreIdHandler,
   deleteStoreHandler,
-  // updateStoreHandler,
+  updateStoreHandler,
 } from "../controller/store.controller";
 
 // Store Routes
@@ -22,7 +22,7 @@ export async function storeRoutes(server: FastifyInstance) {
   server.get("/categories/:storeId", getStoreAndCategoriesWithStoreIdHandler);
 
   // // Update Store
-  // server.patch("/", updateStoreHandler);
+  server.patch("/", updateStoreHandler);
 
   // Delete Store
   server.delete("/:id", deleteStoreHandler);

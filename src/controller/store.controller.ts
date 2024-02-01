@@ -1,5 +1,9 @@
 // Schemas
-import { CreateStoreRequestProps } from "../schemas/store.schema";
+import {
+  CreateStoreRequestProps,
+  GetStoreRequestProps,
+  UpdateStoreRequestProps,
+} from "../schemas/store.schema";
 
 // Types
 import { FastifyReply } from "fastify/types/reply";
@@ -16,6 +20,8 @@ import {
   getStoreAndCategories,
   getStoreAndCategoriesWithStoreId,
 } from "../services/store/get.store.service";
+import { updateStore } from "../services/store/update.store.service";
+import { updateStoreCategoriesWithStoreId } from "../services/category/update.categories.service";
 
 // Create
 export async function createStoreHandler(
@@ -48,7 +54,7 @@ export async function createStoreHandler(
 
 // // Get Store And Categories
 export async function getStoreAndCategoriesHandler(
-  request: FastifyRequest<{ Body: {} }>,
+  request: FastifyRequest<{ Body: GetStoreRequestProps }>,
   reply: FastifyReply
 ) {
   try {
@@ -79,21 +85,41 @@ export async function getStoreAndCategoriesWithStoreIdHandler(
 }
 
 // // Update Store
-// export async function updateStoreHandler(
-//   request: FastifyRequest<{ Body: UpdateStoreRequestProps }>,
-//   reply: FastifyReply
-// ) {
-//   const body = request.body;
+export async function updateStoreHandler(
+  request: FastifyRequest<{
+    Body: UpdateStoreRequestProps & {
+      StoreCategories: {
+        id: string;
+        storeId: string;
+        categoryId: string;
+        createdAt: string;
+        updatedAt: string;
+      };
+    };
+  }>,
+  reply: FastifyReply
+) {
+  const body = request.body;
 
-//   try {
-//     const store = await updateStores(body, reply);
+  if (!body.id.length)
+    return reply
+      .code(500)
+      .send("Id da loja necessario para fazer as alteracoes");
 
-//     return reply.code(200).send(store);
-//   } catch (error: any) {
-//     console.error(error.message);
-//     return reply.code(500).send(error.message);
-//   }
-// }
+  try {
+    await updateStore(body, reply);
+
+    const storeAndCategories = await getStoreAndCategoriesWithStoreId(
+      body.id,
+      reply
+    );
+
+    return reply.code(200).send(storeAndCategories);
+  } catch (error: any) {
+    console.error(error.message);
+    return reply.code(500).send(error.message);
+  }
+}
 
 // // Delete Store
 export async function deleteStoreHandler(

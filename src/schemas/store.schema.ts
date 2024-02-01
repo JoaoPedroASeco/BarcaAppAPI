@@ -8,7 +8,7 @@ import {
   createStoreResponseSchema,
 } from "./schemaTypes/store/create.store.schema";
 import {
-  updateStoreRequestSchema,
+  UpdateStoreProps,
   updateStoreResponseSchema,
 } from "./schemaTypes/store/update.store.schema";
 
@@ -23,7 +23,7 @@ export type GetStoreRequestProps = {};
 export type GetStoreResponseProps = z.infer<typeof updateStoreResponseSchema>;
 
 // Types - UPDATE
-export type UpdateStoreRequestProps = z.infer<typeof updateStoreRequestSchema>;
+export type UpdateStoreRequestProps = UpdateStoreProps;
 export type UpdateStoreResponseProps = z.infer<
   typeof updateStoreResponseSchema
 >;

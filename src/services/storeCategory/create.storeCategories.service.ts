@@ -8,24 +8,18 @@ import {} from "../../schemas/store.schema";
 import { prisma } from "../../utils/prisma";
 
 // Types
-type createStoreCategoryRequestProps = {
-  categories: string[];
-  storeId: string;
-};
+import { CreateStoreCategoryProps } from "../../schemas/schemaTypes/storeCategories/create.storeCategories";
 
 // StoreCategory Services
 export async function createStoreCategory(
-  { categories, storeId }: createStoreCategoryRequestProps,
+  { categories, storeId }: CreateStoreCategoryProps,
   reply: FastifyReply
 ) {
   try {
-    console.log(`categorias: ${categories}`);
     if (!categories.length || categories.length <= 0)
       throw new Error("Categorias invaludas ou nulas");
 
-    console.log(`as categorias sao validas!`);
-
-    const arrayOdStoreCategories = categories.map((categoryId) => {
+    const arrayOfStoreCategories = categories.map((categoryId) => {
       return {
         categoryId,
         storeId,
@@ -33,7 +27,7 @@ export async function createStoreCategory(
     });
 
     await prisma.storeCategories.createMany({
-      data: arrayOdStoreCategories,
+      data: arrayOfStoreCategories,
       skipDuplicates: true,
     });
 
